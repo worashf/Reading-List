@@ -18,7 +18,7 @@ const BookType = new GraphQLObjectType({
         author: {
             type: AuthorType,
             resolve(parent, args) {
-                // return book author
+              return Author.findById(parent.authorId)
             }
         }
     })
@@ -34,7 +34,7 @@ const AuthorType = new GraphQLObjectType({
         books: {
             type: BookType,
             resolve(parent, args) {
-                //return books writen by the author
+              return Book.findById({authorId: parent.id})
             }
         }
     })
@@ -63,7 +63,7 @@ const RootQuery = new GraphQLObjectType({
                 return Book.find({})
             }
         },
-        auhtors: {
+        authors: {
             type: new GraphQLList(AuthorType),
             resolve(parent, args) {
                 return Author.find({})
@@ -71,7 +71,45 @@ const RootQuery = new GraphQLObjectType({
         }
     }
 })
+const Mutation  = new GraphQLObjectType({
+    name: "Mutation",
+    fields:{
+        addBook:{
+            type:  BookType,
+            args:{
+                name: {type: new GraphQLNonNull(GraphQLString)},
+                genre: { type: new GraphQLNonNull(GraphQLString) },
+                authorId : {type: new GraphQLNonNull(GraphQLID)}
+            },
+            resolve(parent, args){
+                const book  = new Book({
+                    name: args.name,
+                    genre: args.genre,
+                    authorId: args.authorId
+                })
+                return book.save()
+            }
+        },
+        addAuthor:{
+            type: AuthorType,
+            args:{
+                name: {type: new GraphQLNonNull(GraphQLString)},
+                age: {type: new GraphQLNonNull(GraphQLInt)}
+            },
+            resolve(parent,args){
+                const author  = new Author({
+                    name:  args.name,
+                    age : args.age
+                })
+                return author.save()
+            }
+    
+        }
+    }
+})
+
 
 module.exports = new GraphQLSchema({
-    query: RootQuery
+    query: RootQuery,
+    mutation: Mutation
 })
