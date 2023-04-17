@@ -1,5 +1,5 @@
 # Reading List
-> Reading list is built with MERN to GraphQL basic skills, and the app manage information for books. The  app  has features like Add book, author, get books and authors.
+> Reading list is built with MERN to learn GraphQL basic skills, and the app manage information for books. The  app  has features like Add book, author, get books and authors.
 
 
 ## Built With
