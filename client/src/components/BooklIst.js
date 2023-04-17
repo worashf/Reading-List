@@ -1,7 +1,10 @@
-import React, {useEffect} from "react"
+import React, {useState} from "react"
 import {useQuery} from "@apollo/client"
 import { GET_ALL_BOOKS } from "../graphql/query"
+import Book from "./Book"
 const BookList = () => {
+
+    const [selected, setSelected] = useState("")
     const  {error, loading, data}   = useQuery(GET_ALL_BOOKS)
 
 
@@ -17,12 +20,11 @@ console.log(data)
             <ul id="book-list">
                 {
                     data.books.map(book =>{
-                        return <li key  ={book.id}>
-                            <h5> {book.name} by {book.author.name}</h5>
-                        </li>
+                        return   <li key={ book.id } onClick={ (e) => setSelected( book.id ) }>{ book.name }</li>
                     })
                 }
             </ul>
+            <Book bookId={selected} />
 
         </>
     )
